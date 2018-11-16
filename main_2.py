@@ -14,21 +14,18 @@ if __name__ == '__main__':
         print("method includes: backtrack hillclimbing")
     # input
     sudokudata = filereader.ReadFile(sys.argv[1])
-    csp = BacktrackCSP.CreateCSP(sudokudata)
     print(sudokudata)
     method = sys.argv[3]
-    print(method)
     # different method
-    if method == 'backtrack':
-        print("backtrack detected!")
+    if method == 'HC':
+        print("HC detected: Hill Climbing (HC)")
+        CH.HillClimbing()
+    elif method == "backtrack":
+        print("Backtrack detected")
+        csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
         alg = BacktrackCSP.BacktrackingSearch()
-        alg.solve(csp, True, True, True) #lookahead, mcv, ac3
-        print csp.variables
-        print 'One of the optimal assignments:',  alg.optimalAssignment
-
-    elif method == "hillclimbing":
-        pass
-
-    # output
-    with open(sys.argv[2], "w") as outfile:
-        outfile.write(sudokudata)
+        alg.solve(csp, True, True, True)
+        print 'One of the optimal assignments:', alg.optimalAssignment
+        # output
+  #  with open(sys.argv[2], "w") as outfile:
+  #      outfile.write(sudokudata)

@@ -1,22 +1,21 @@
 import collections, copy
 
-def CreateCSP(sudokudata):
+def create_suduko(n = 4, board = None):
     '''
     Create suduku variables and constraints without the input
     :param n:
     :return: csp
     '''
     csp = CSP()
-    def getGrid(i,j):
-        return i / int(sudokudata.N ** 0.5) * int(sudokudata.N ** 0.5) + j / int(sudokudata.N ** 0.5) + 1
-
-    for i in range(0, sudokudata.N):
-        for j in range(0, sudokudata.N):
-            if sudokudata.board[i][j] == 0:
-                csp.add_variable((i, j, getGrid(i, j)), range(1, sudokudata.N+1)) # i:row, j:column, getGrid(i, j): kth grid of (i,j) in sudoku
+    def getnum(i,j):
+        return (i - 1) / int(n ** 0.5) * int(n ** 0.5) + (j - 1) / int(n ** 0.5) + 1
+    for i in range(1, n+1):
+        for j in range(1, n+1):
+            if int(board[i-1][j-1]) == 0:
+                csp.add_variable((i, j, getnum(i, j)), range(1, n+1)) # i:row, j:column, getnum(i, j): position of (i,j) in sudoku
             else:
-                csp.add_variable((i, j, getGrid(i, j)), sudokudata.board[i][j])
-            
+                csp.add_variable((i, j, getnum(i, j)), board[i-1][j-1])
+            #edit here if we have input
     for var1 in csp.variables:
         for var2 in csp.variables:
             if var1 == var2:
@@ -74,21 +73,6 @@ class BacktrackingSearch():
             print "No solution was found."
 
     def get_delta_weight(self, assignment, var, val):
-        """
-        Given a CSP, a partial assignment, and a proposed new value for a variable,
-        return the change of weights after assigning the variable with the proposed
-        value.
-
-        @param assignment: A dictionary of current assignment. Unassigned variables
-            do not have entries, while an assigned variable has the assigned value
-            as value in dictionary. e.g. if the domain of the variable A is [5,6],
-            and 6 was assigned to it, then assignment[A] == 6.
-        @param var: name of an unassigned variable.
-        @param val: the proposed value.
-
-        @return w: Change in weights as a result of the proposed assignment. This
-            will be used as a multiplier on the current weight.
-        """
         assert var not in assignment
         w = 1.0
         if self.csp.unaryFactors[var]:
@@ -101,18 +85,6 @@ class BacktrackingSearch():
         return w
 
     def solve(self, csp, lookahead = False, mcv = False, ac3 = False):
-        """
-        Solves the given weighted CSP using heuristics as specified in the
-        parameter. Note that unlike a typical unweighted CSP where the search
-        terminates when one solution is found, we want this function to find
-        all possible assignments. The results are stored in the variables
-        described in reset_result().
-
-        @param csp: A weighted CSP.
-        @param mcv: When enabled, Most Constrained Variable heuristics is used.
-        @param ac3: When enabled, AC-3 will be used after each assignment of an
-            variable is made.
-        """
         # Lookahead
         self.lookahead = lookahead
         # CSP to be solved.
@@ -134,17 +106,6 @@ class BacktrackingSearch():
         self.print_stats()
 
     def backtrack(self, assignment, numAssigned, weight):
-        """
-        Perform the back-tracking algorithms to find all possible solutions to
-        the CSP.
-
-        @param assignment: A dictionary of current assignment. Unassigned variables
-            do not have entries, while an assigned variable has the assigned value
-            as value in dictionary. e.g. if the domain of the variable A is [5,6],
-            and 6 was assigned to it, then assignment[A] == 6.
-        @param numAssigned: Number of currently assigned variables
-        @param weight: The weight of the current partial assignment.
-        """
         self.numOperations += 1
         assert weight > 0
         if numAssigned == self.csp.numVars:
@@ -211,14 +172,6 @@ class BacktrackingSearch():
                     del assignment[var]
 
     def get_unassigned_variable(self, assignment):
-        """
-        Given a partial assignment, return a currently unassigned variable.
-
-        @param assignment: A dictionary of current assignment. This is the same as
-            what you've seen so far.
-
-        @return var: a currently unassigned variable.
-        """
 
         if not self.mcv:
             # Select a variable without any heuristics.
