@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import filereader
+import BacktrackCSP
 
 if __name__ == '__main__':
     # Check command-line arguments.
@@ -13,13 +14,18 @@ if __name__ == '__main__':
         print("python main.py <input> <output> <method>")
     # input
     sudokudata = filereader.printSudoku(sys.argv[1])
-    print(sudokudata)
+    print sudokudata.board
     method = sys.argv[3:]
     # different method
     if method == 'HC':
         print("HC detected: Hill Climbing (HC)")
         CH.HillClimbing()
-
-    # output
-    with open(sys.argv[2], "w") as outfile:
-        outfile.write(sudokudata)
+    else:
+        print 'here'
+        csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
+        alg = BacktrackCSP.BacktrackingSearch()
+        alg.solve(csp, True, True, True)
+        print 'One of the optimal assignments:', alg.optimalAssignment
+        # output
+  #  with open(sys.argv[2], "w") as outfile:
+  #      outfile.write(sudokudata)
