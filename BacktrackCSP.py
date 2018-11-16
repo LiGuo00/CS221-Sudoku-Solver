@@ -14,7 +14,7 @@ def create_suduko(n = 4, board = None):
             if int(board[i-1][j-1]) == 0:
                 csp.add_variable((i, j, getnum(i, j)), range(1, n+1)) # i:row, j:column, getnum(i, j): position of (i,j) in sudoku
             else:
-                csp.add_variable((i, j, getnum(i, j)), board[i-1][j-1])
+                csp.add_variable((i, j, getnum(i, j)), range(int(board[i-1][j-1]), int(board[i-1][j-1])+1))
             #edit here if we have input
     for val1 in csp.variables:
         for val2 in csp.variables:
