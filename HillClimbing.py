@@ -7,6 +7,8 @@ Created on Wed Nov 14 14:12:31 2018
 """
 
 import numpy as np
+import time
+import sys
 
 
 
@@ -39,7 +41,7 @@ class HillClimbing():
             self.swap(self.board[row], valIndex, col)
             
             
-            
+    # swap two elements in an array
     def swap(self, array, p1, p2):
         array[p1], array[p2] = array[p2], array[p1]
         
@@ -48,10 +50,10 @@ class HillClimbing():
 
     # heuristic function to be maximized
     # defined as sum of unique elements in row, column and sub-grid
-    def heuristic(self, board):  # board: numpy array
+    def heuristic(self, board=[]):  # board: numpy array
         score = 0;
         if board == []:
-            return 0
+            board = self.board
         for row in board:
             score += len(np.unique(row))
         for col in np.transpose(board):
@@ -101,26 +103,47 @@ class HillClimbing():
     # Start doing hill climbing
     def climbHill(self):
         scores = []
-        maxScore = self.fitness()
+        maxScore = self.heuristic()
 		# print("Initial score: " + str(maxScore))
         while True:
 			# print("Current score: " + str(maxScore))
             scores.append(maxScore)
-            (row, (col1, col2), nextScore) = self.bestNeighbor()
+            (row, (col1, col2), nextScore) = self.bestSucc()
             if(nextScore <= maxScore):
                 return scores
             self.swap(self.board[row], col1, col2)
             maxScore = nextScore
+            
+            
+            
+    def printBoard(self, board=[]):
+        if(board == []):
+            board = self.board
+            
+        for i in range(len(board)):
+            if(i % 3 == 0 and i != 0):
+                print("------+------+------")
+            for j in range(len(board[i])):
+                if(j % 3 == 0 and j != 0):
+                    sys.stdout.write("|")
+                sys.stdout.write(str(board[i][j]) + " ")
+            print("")
                     
                         
-                    
+
+startTime = time.time()
                 
-board = np.ones((9, 9), dtype=np.int)
+board = np.zeros((9, 9), dtype=np.int)
 climb =  HillClimbing(board)
 print climb.fixedValue
+climb.printBoard()
+print climb.climbHill()
+climb.printBoard()
+
+endTime = time.time()
+print "Time spent: ", endTime - startTime
     
-    
-    
+
     
     
     
