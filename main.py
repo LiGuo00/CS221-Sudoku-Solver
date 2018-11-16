@@ -15,7 +15,7 @@ if __name__ == '__main__':
         print("Program did not received enough correct argument.")
         print("python main.py <input> <output> <method>")
     # input
-    sudokudata = filereader.printSudoku(sys.argv[1])
+    sudokudata = filereader.ReadFile(sys.argv[1])
     method = sys.argv[3:]
     # different method
     if method == 'HC':
@@ -24,8 +24,9 @@ if __name__ == '__main__':
     else:
         csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
         alg = BacktrackCSP.BacktrackingSearch()
-        alg.solve(csp, True, True, False, True) #lookahead, mcv, ac3, find only one solution
+        alg.solve(csp, True, True, False, False) #lookahead, mcv, ac3, find only one solution
         print 'One of the optimal assignments:', alg.optimalAssignment
+
 
         #print the board and ready to write into a file
         n= sudokudata.N
