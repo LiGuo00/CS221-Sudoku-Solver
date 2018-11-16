@@ -26,7 +26,6 @@ if __name__ == '__main__':
         csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
         alg = BacktrackCSP.BacktrackingSearch()
         alg.solve(csp, True, True, False, True) #lookahead, mcv, ac3, find only one solution
-
         #print the board and ready to write into a file
         n= sudokudata.N
         def getnum(i, j):
