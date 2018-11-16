@@ -36,11 +36,6 @@ def create_suduko(n = 4, board = None):
 class BacktrackingSearch():
 
     def reset_results(self):
-        """
-        This function resets the statistics of the different aspects of the
-        CSP solver. We will be using the values here for grading, so please
-        do not make any modification to these variables.
-        """
         # Keep track of the best assignment and weight found.
         self.optimalAssignment = {}
         self.optimalWeight = 0
@@ -60,6 +55,7 @@ class BacktrackingSearch():
 
         # List of all solutions found.
         self.allAssignments = []
+
 
     def print_stats(self):
         """
@@ -84,7 +80,7 @@ class BacktrackingSearch():
             if w == 0: return w
         return w
 
-    def solve(self, csp, lookahead = False, mcv = False, ac3 = False):
+    def solve(self, csp, lookahead = False, mcv = False, ac3 = False, findonesolution = True):
         # Lookahead
         self.lookahead = lookahead
         # CSP to be solved.
@@ -93,6 +89,7 @@ class BacktrackingSearch():
         # Set the search heuristics requested asked.
         self.mcv = mcv
         self.ac3 = ac3
+        self.findonesolution = findonesolution
 
         # Reset solutions from previous search.
         self.reset_results()
@@ -105,9 +102,14 @@ class BacktrackingSearch():
         # Print summary of solutions.
         self.print_stats()
 
+        #Only would like to find one solution
+
     def backtrack(self, assignment, numAssigned, weight):
+        if self.findonesolution and len(self.optimalAssignment) != 0:
+            return
         self.numOperations += 1
-        assert weight > 0
+        if self.lookahead:
+            assert weight > 0
         if numAssigned == self.csp.numVars:
             # A satisfiable solution have been found. Update the statistics.
             self.numAssignments += 1
@@ -115,7 +117,6 @@ class BacktrackingSearch():
             for var in self.csp.variables:
                 newAssignment[var] = assignment[var]
             self.allAssignments.append(newAssignment)
-
             if len(self.optimalAssignment) == 0 or weight >= self.optimalWeight:
                 if weight == self.optimalWeight:
                     self.numOptimalAssignments += 1

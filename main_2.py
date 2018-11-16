@@ -17,9 +17,9 @@ if __name__ == '__main__':
     print(sudokudata)
     method = sys.argv[3]
     # different method
-    if method == 'HC':
-        print("HC detected: Hill Climbing (HC)")
-        CH.HillClimbing()
+    if method == 'hillclimbing':
+        print("hillclimbing detected")
+        pass
     elif method == "backtrack":
         print("Backtrack detected")
         csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
