@@ -15,17 +15,17 @@ if __name__ == '__main__':
         print("Program did not received enough correct argument.")
         print("python main.py <input> <output> <method>")
     # input
-    sudokudata = filereader.printSudoku(sys.argv[1])
+    sudokudata = filereader.ReadFile(sys.argv[1])
+    print("Input is:")
+    print(sudokudata)
     method = sys.argv[3:]
     # different method
     if method == 'HC':
-        print("HC detected: Hill Climbing (HC)")
-        CH.HillClimbing()
+    	pass
     else:
         csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
         alg = BacktrackCSP.BacktrackingSearch()
         alg.solve(csp, True, True, False, True) #lookahead, mcv, ac3, find only one solution
-        print 'One of the optimal assignments:', alg.optimalAssignment
 
         #print the board and ready to write into a file
         n= sudokudata.N
@@ -38,8 +38,12 @@ if __name__ == '__main__':
                 table.append(str(alg.optimalAssignment[i, j, getnum(i, j)]))
             board.append(table)
     sudokudataoutput= gameboard.GameBoard(sudokudata.N, sudokudata.p, sudokudata.q, board)
-    print sudokudataoutput
+    print(sudokudataoutput)
 
     #output doesn't work
-    #with open(sys.argv[2], "w") as outfile:
-        #outfile.write(sudokudataoutput)
+    with open(sys.argv[2], "w") as outfile:
+        for line in board:
+        	for num in line:
+        		outfile.write('{}'.format(num))
+        		outfile.write('  ')
+    		outfile.write('\n')

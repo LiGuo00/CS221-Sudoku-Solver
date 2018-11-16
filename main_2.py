@@ -26,6 +26,7 @@ if __name__ == '__main__':
         alg = BacktrackCSP.BacktrackingSearch()
         alg.solve(csp, True, True, True)
         print 'One of the optimal assignments:', alg.optimalAssignment
+        
         # output
   #  with open(sys.argv[2], "w") as outfile:
   #      outfile.write(sudokudata)

@@ -8,7 +8,6 @@ class GameBoard:
 
     # --------- String Representation ---------
     def __str__(self):
-        print('test')
         output = "N:" + str(self.N) + "\tp:" + str(self.p) + "\tq:" \
             + str(self.q) + "\n"
         for i in range(self.N):
