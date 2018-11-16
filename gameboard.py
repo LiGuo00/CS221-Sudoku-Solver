@@ -1,9 +1,9 @@
 class GameBoard:
 
     def __init__(self, N=None, p=None, q=None, board=None):
+        self.N = N
         self.p = p  
         self.q = q  
-        self.N = N  
         self.board = board
 
     # --------- String Representation ---------

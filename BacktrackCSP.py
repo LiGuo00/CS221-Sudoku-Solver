@@ -1,28 +1,32 @@
 import collections, copy
 
-def create_suduko(n = 4):
+def CreateCSP(sudokudata):
     '''
     Create suduku variables and constraints without the input
     :param n:
     :return: csp
     '''
     csp = CSP()
-    def getnum(i,j):
-        return (i - 1) / int(n ** 0.5) * int(n ** 0.5) + (j - 1) / int(n ** 0.5) + 1
-    for i in range(1, n+1):
-        for j in range(1, n+1):
-            csp.add_variable((i, j, getnum(i, j)), range(1, n+1)) # i:row, j:column, getnum(i, j): position of (i,j) in sudoku
-            #edit here if we have input
-    for val1 in csp.variables:
-        for val2 in csp.variables:
-            if val1 == val2:
+    def getGrid(i,j):
+        return i / int(sudokudata.N ** 0.5) * int(sudokudata.N ** 0.5) + j / int(sudokudata.N ** 0.5) + 1
+
+    for i in range(0, sudokudata.N):
+        for j in range(0, sudokudata.N):
+            if sudokudata.board[i][j] == 0:
+                csp.add_variable((i, j, getGrid(i, j)), range(1, sudokudata.N+1)) # i:row, j:column, getGrid(i, j): kth grid of (i,j) in sudoku
+            else:
+                csp.add_variable((i, j, getGrid(i, j)), sudokudata.board[i][j])
+            
+    for var1 in csp.variables:
+        for var2 in csp.variables:
+            if var1 == var2:
                 continue
-            if val1[0] == val2[0]:
-                csp.add_binary_factor(val1, val2, lambda x, y: x != y)
-            if val1[1] == val2[1]:
-                csp.add_binary_factor(val1, val2, lambda x, y: x != y)
-            if val1[2] == val2[2]:
-                csp.add_binary_factor(val1, val2, lambda x, y: x != y)
+            if var1[0] == var2[0]:
+                csp.add_binary_factor(var1, var2, lambda x, y: x != y)
+            elif var1[1] == var2[1]:
+                csp.add_binary_factor(var1, var2, lambda x, y: x != y)
+            elif var1[2] == var2[2]:
+                csp.add_binary_factor(var1, var2, lambda x, y: x != y)
     return csp
 
 

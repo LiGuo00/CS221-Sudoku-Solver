@@ -3,7 +3,7 @@ from math import floor
 import gameboard
 
 
-def printSudoku(filePath):
+def ReadFile(filePath):
     """Read from input file and generate gameboard."""
     with open(filePath, 'r') as f:
         lines = f.readlines()
