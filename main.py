@@ -39,7 +39,6 @@ if __name__ == '__main__':
     sudokudataoutput= gameboard.GameBoard(sudokudata.N, sudokudata.p, sudokudata.q, board)
     print(sudokudataoutput)
 
-    #output doesn't work
     with open(sys.argv[2], "w") as outfile:
         for line in board:
         	for num in line:
