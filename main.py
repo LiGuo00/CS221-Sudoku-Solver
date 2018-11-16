@@ -4,6 +4,7 @@ import sys
 import time
 import filereader
 import BacktrackCSP
+import gameboard
 
 if __name__ == '__main__':
     # Check command-line arguments.
@@ -15,7 +16,6 @@ if __name__ == '__main__':
         print("python main.py <input> <output> <method>")
     # input
     sudokudata = filereader.printSudoku(sys.argv[1])
-    print sudokudata.board
     method = sys.argv[3:]
     # different method
     if method == 'HC':
@@ -24,8 +24,22 @@ if __name__ == '__main__':
     else:
         csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
         alg = BacktrackCSP.BacktrackingSearch()
-        alg.solve(csp, True, True, False, False) #lookahead, mcv, ac3, find only one solution
+        alg.solve(csp, True, True, False, True) #lookahead, mcv, ac3, find only one solution
         print 'One of the optimal assignments:', alg.optimalAssignment
-        # output
-  #  with open(sys.argv[2], "w") as outfile:
-  #      outfile.write(sudokudata)
+
+        #print the board and ready to write into a file
+        n= sudokudata.N
+        def getnum(i, j):
+            return (i - 1) / int(n ** 0.5) * int(n ** 0.5) + (j - 1) / int(n ** 0.5) + 1
+        board = []
+        for i in range(1, sudokudata.N+1):
+            table = []
+            for j in range(1, sudokudata.N+1):
+                table.append(str(alg.optimalAssignment[i, j, getnum(i, j)]))
+            board.append(table)
+    sudokudataoutput= gameboard.GameBoard(sudokudata.N, sudokudata.p, sudokudata.q, board)
+    print sudokudataoutput
+
+    #output doesn't work
+    #with open(sys.argv[2], "w") as outfile:
+        #outfile.write(sudokudataoutput)
