@@ -26,6 +26,21 @@ def ReadFile(filePath):
                     for n in lines[i].split():
                         # print(num)
                         # print(type(num)
-                        tempLine.append(n)
+                        tempLine.append(int(n))
                     board.append(tempLine)
             return gameboard.GameBoard(N, p, q, board)
+   
+    
+# simple criteria for difficulty
+# define the difficulty as percentage of 0 in the board
+def getDifficulty(board):
+    n = len(board)
+    m = len(board[0])
+    count = 0
+    total = n * m
+    for i in range(n):
+        for j in range(m):
+            if board[i][j] == 0:
+                count += 1
+    return float(count) / total
+                
