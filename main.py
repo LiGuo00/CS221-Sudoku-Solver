@@ -17,7 +17,7 @@ if __name__ == '__main__':
     # input
     sudokudata = filereader.ReadFile(sys.argv[1])
     print("Input is:")
-    print(sudokudata)
+    #print(sudokudata)
     method = sys.argv[3:]
     # different method
     if method == 'HC':
@@ -25,7 +25,13 @@ if __name__ == '__main__':
     else:
         csp = BacktrackCSP.create_suduko(sudokudata.N, sudokudata.board)
         alg = BacktrackCSP.BacktrackingSearch()
-        alg.solve(csp, True, True, False, True) #lookahead, mcv, ac3, find only one solution
+        totalTime = 0
+        pp = 1
+        for i in range(pp):
+            start_time = time.time()
+            alg.solve(csp, True, False, False, True) #lookahead, mcv, ac3, find only one solution
+            totalTime = totalTime + time.time()-start_time
+        print totalTime/pp
         #print the board and ready to write into a file
         n= sudokudata.N
         def getnum(i, j):
@@ -37,11 +43,11 @@ if __name__ == '__main__':
                 table.append(str(alg.optimalAssignment[i, j, getnum(i, j)]))
             board.append(table)
     sudokudataoutput= gameboard.GameBoard(sudokudata.N, sudokudata.p, sudokudata.q, board)
-    print(sudokudataoutput)
+    #print(sudokudataoutput)
 
-    with open(sys.argv[2], "w") as outfile:
-        for line in board:
-        	for num in line:
-        		outfile.write('{}'.format(num))
-        		outfile.write('  ')
-    		outfile.write('\n')
+#    with open(sys.argv[2], "w") as outfile:
+#        for line in board:
+#        	for num in line:
+#        		outfile.write('{}'.format(num))
+#        		outfile.write('  ')
+#    		outfile.write('\n')
